@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as env;
+import 'package:provider/provider.dart';
 
-void main() {
+import 'core/routes.dart';
+import 'core/theme.dart';
+import 'pages/home_page.dart';
+import 'pages/login_page.dart';
+import 'pages/splashscreen_page.dart';
+import 'repositories/weather_repository.dart';
+import 'services/weather_api_client.dart';
+import 'viewmodels/weather_viewmodels.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await env.dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -10,28 +23,29 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => WeatherApiClient()),
+        ProxyProvider<WeatherApiClient, WeatherRepository>(
+          update: (_, api, __) => WeatherRepository(api),
+        ),
+        ChangeNotifierProxyProvider<WeatherRepository, WeatherViewModel>(
+          create: (_) =>
+              WeatherViewModel(WeatherRepository(WeatherApiClient())),
+          update: (_, repo, __) => WeatherViewModel(repo),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Weather App',
+        theme: AppTheme.light(),
+        initialRoute: AppRoutes.splashscreen,
+        routes: {
+          AppRoutes.splashscreen: (_) => const SplashPage(),
+          AppRoutes.login: (_) => const LoginPage(),
+          AppRoutes.home: (_) => const HomePage(),
+        },
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
