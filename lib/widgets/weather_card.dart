@@ -12,7 +12,7 @@ class WeatherCard extends StatelessWidget {
         w != null ? 'https://openweathermap.org/img/wn/${w.icon}@2x.png' : null;
 
     return Card(
-      color: Colors.white.withOpacity(0.2), // ungu gelap transparan
+      color: Colors.white.withOpacity(0.2),
       elevation: 4,
       shadowColor: Colors.black54,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -71,7 +71,7 @@ class WeatherCard extends StatelessWidget {
         '$label: $value',
         style: const TextStyle(color: Colors.white),
       ),
-      backgroundColor: const Color(0xFF2E2E5E), // ungu kebiruan
+      backgroundColor: const Color(0xFF2E2E5E),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }

@@ -17,7 +17,7 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // biar AppBar transparan
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: title != null
             ? Text(
@@ -26,15 +26,15 @@ class AppScaffold extends StatelessWidget {
               )
             : null,
         actions: actions,
-        backgroundColor: Colors.transparent, // transparan
-        elevation: 0, // hilangkan bayangan
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       floatingActionButton: floatingActionButton,
-      backgroundColor: Colors.transparent, // scaffold transparan
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/bgimage.png"), // Ganti dengan gambar kamu
+            image: AssetImage("assets/bgimage.png"),
             fit: BoxFit.cover,
           ),
         ),
